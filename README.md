@@ -9,6 +9,8 @@ Bash on Windows usually runs in a command prompt window.
 It is inconvenience for X window applications such as Xterm or GNOME terminal.
 `wslexec` allows running a command without spawning any command prompt window.
 
+See also [Stack Overflow: WSL run linux from windows without spawning a cmd-window](https://stackoverflow.com/questions/41225711/wsl-run-linux-from-windows-without-spawning-a-cmd-window).
+
 
 ## Getting Started
 
