@@ -20,7 +20,7 @@ jobs:
               go get github.com/mitchellh/gox
               go get github.com/tcnksm/ghr
               gox -osarch windows/amd64 -output 'dist/{{.Dir}}'
-              ghr "$CIRCLE_TAG" dist
+              ghr -u "$CIRCLE_PROJECT_USERNAME" -r "$CIRCLE_PROJECT_REPONAME" "$CIRCLE_TAG" dist
             fi
 
 deployment:
