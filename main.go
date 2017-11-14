@@ -7,6 +7,8 @@ import (
 	"os"
 	"fmt"
 	"strings"
+	"time"
+	"bytes"
 )
 
 func main() {
@@ -24,14 +26,28 @@ func main() {
 		os.Exit(1)
 	}
 
-	cmd := exec.Command("bash", "-c", strings.Join(flag.Args(), " "))
-	cmd.Env = append(os.Environ(), fmt.Sprintf("DISPLAY=%s", display))
+	environment := []string{fmt.Sprintf("DISPLAY='%s'", *display)}
+	args := append(environment, flag.Args()...)
+	cmd := exec.Command("bash", "-c", strings.Join(args, " "))
+
+	var stdout, stderr bytes.Buffer
+	cmd.Stdout = &stdout
+	cmd.Stderr = &stderr
 
 	log.Println("Executing...", cmd.Args)
-	err := cmd.Start()
-	if err != nil {
+	if err := cmd.Start(); err != nil {
 		log.Fatal(err)
 	}
 
-	log.Println("Running... PID", cmd.Process.Pid)
+	log.Println("Running at PID", cmd.Process.Pid)
+	time.Sleep(100 * time.Millisecond)
+
+	if output := stdout.String(); output != "" {
+		log.Println(output)
+	}
+	if output := stderr.String(); output != "" {
+		log.Println(output)
+	}
+
+	cmd.Process.Release()
 }
