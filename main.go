@@ -3,51 +3,35 @@ package main
 import (
 	"os/exec"
 	"log"
-	"flag"
 	"os"
-	"fmt"
 	"strings"
-	"time"
-	"bytes"
+	"path/filepath"
+	"syscall"
 )
 
 func main() {
-	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "Usage\n  %s [Options] Arguments...\nOptions\n", os.Args[0])
-		flag.PrintDefaults()
-	}
-	var (
-		display = flag.String("display", ":0", "DISPLAY environment variable")
-	)
-	flag.Parse()
+	baseName := filepath.Base(os.Args[0])
+	args := os.Args[1:]
 
-	if flag.NArg() == 0 {
-		flag.Usage()
-		os.Exit(1)
+	if ! strings.HasPrefix(baseName, "wsl") {
+		log.Println("Basename does not have prefix: ", baseName)
+		log.Fatal("Rename this binary to command name with prefix `wsl`. For example, rename to `wslgit` to run git command on WSL.")
 	}
 
-	environment := []string{fmt.Sprintf("DISPLAY='%s'", *display)}
-	args := append(environment, flag.Args()...)
-	cmd := exec.Command("bash", "-c", strings.Join(args, " "))
+	commandName := strings.TrimSuffix(strings.TrimPrefix(baseName, "wsl"), ".exe")
+	commandLine := append([]string{commandName}, args...)
 
-	var stdout, stderr bytes.Buffer
-	cmd.Stdout = &stdout
-	cmd.Stderr = &stderr
+	cmd := exec.Command("wsl", commandLine...)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 
-	log.Println("Executing...", cmd.Args)
-	if err := cmd.Start(); err != nil {
-		log.Fatal(err)
+	if err := cmd.Run(); err != nil {
+		status := 1
+		if exitError, ok := err.(*exec.ExitError); ok {
+			if waitStatus, ok := exitError.Sys().(syscall.WaitStatus); ok {
+				status = waitStatus.ExitStatus()
+			}
+		}
+		os.Exit(status)
 	}
-
-	log.Println("Running at PID", cmd.Process.Pid)
-	time.Sleep(100 * time.Millisecond)
-
-	if output := stdout.String(); output != "" {
-		log.Println(output)
-	}
-	if output := stderr.String(); output != "" {
-		log.Println(output)
-	}
-
-	cmd.Process.Release()
 }
