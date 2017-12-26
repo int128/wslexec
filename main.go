@@ -11,8 +11,6 @@ import (
 	"fmt"
 )
 
-var windowsDrivePathPattern = regexp.MustCompile("(\\w):\\\\")
-
 func main() {
 	baseName := filepath.Base(os.Args[0])
 	if ! strings.HasPrefix(baseName, "wsl") {
@@ -47,12 +45,18 @@ func translateWindowsPathInArgs(windowsPathArgs []string) []string {
 	return unixPathArgs
 }
 
+var windowsDrivePathPattern = regexp.MustCompile("(\\w):\\\\")
+
 func translateWindowsPathInArg(arg string) string {
-	driveReplaced := windowsDrivePathPattern.ReplaceAllStringFunc(arg, func (drivePath string) string {
-		m := windowsDrivePathPattern.FindStringSubmatch(drivePath)
-		drive := strings.ToLower(m[1])
-		return fmt.Sprintf("/mnt/%s/", drive)
-	})
-	backslashReplaced := strings.Replace(driveReplaced, "\\", "/", -1)
-	return backslashReplaced
+	if windowsDrivePathPattern.FindStringIndex(arg) != nil {
+		driveReplaced := windowsDrivePathPattern.ReplaceAllStringFunc(arg, func (drivePath string) string {
+			m := windowsDrivePathPattern.FindStringSubmatch(drivePath)
+			drive := strings.ToLower(m[1])
+			return fmt.Sprintf("/mnt/%s/", drive)
+		})
+		backslashReplaced := strings.Replace(driveReplaced, "\\", "/", -1)
+		return backslashReplaced
+	} else {
+		return arg
+	}
 }
