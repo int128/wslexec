@@ -37,9 +37,9 @@ Using PHP on WSL:
 
 ## How it works
 
-### Path translation
+### Windows path translation
 
-Windows paths (e.g. `C:\`) in command line are translated to WSL paths (e.g. `/mnt/c`).
+Windows paths (e.g. `C:\`) in the command line are translated to WSL paths (e.g. `/mnt/c`).
 
 For example,
 
@@ -51,6 +51,22 @@ is translated to following:
 
 ```sh
 git -C /mnt/c/Users/foo/example log
+```
+
+### WSL path translation
+
+WSL paths (e.g. `/mnt/c`) in the standard input are translated to Windows paths (e.g. `C:/`).
+
+For example,
+
+```sh
+/mnt/c/Users/foo/example
+```
+
+is translated to following:
+
+```sh
+c:/Users/foo/example
 ```
 
 
