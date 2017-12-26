@@ -8,7 +8,24 @@ A command line tool to run a command on WSL (Windows Subsystem for Linux).
 Download [the latest release](https://github.com/int128/wslexec/releases).
 
 Rename the binary to command name with prefix `wsl`.
-For example, rename to `wslgit` to run the `git` command on WSL.
+For example, rename the binary to `wslgit` to run the `git` command on WSL.
+
+
+### Path translation
+
+A Windows path (e.g. `C:\`) in command arguments are translated to a WSL path (e.g. `/mnt/c`).
+
+For example,
+
+```sh
+wslgit.exe -C C:\Users\foo\example log
+```
+
+is translated to following:
+
+```sh
+git -C /mnt/c/Users/foo/example log
+```
 
 
 ## Contributions
