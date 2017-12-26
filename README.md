@@ -1,6 +1,6 @@
 # wslexec [![CircleCI](https://circleci.com/gh/int128/wslexec.svg?style=shield)](https://circleci.com/gh/int128/wslexec)
 
-A command line tool to run a command on WSL (Windows Subsystem for Linux).
+A wrapper to run a Linux command inside WSL (Windows Subsystem for Linux) from Windows native applications.
 
 
 ## Getting Started
@@ -8,12 +8,38 @@ A command line tool to run a command on WSL (Windows Subsystem for Linux).
 Download [the latest release](https://github.com/int128/wslexec/releases).
 
 Rename the binary to command name with prefix `wsl`.
-For example, rename the binary to `wslgit` to run the `git` command on WSL.
+For example, rename the binary to `wslgit` to run the `git` command inside WSL.
 
+### IntelliJ IDEA and GoLand
+
+Open Default Settings - Version Control - Git and set the Path to Git executable.
+
+![GoLand Settings](images/goland.png)
+
+### Visual Studio Code
+
+Using Git on WSL:
+
+```json
+{
+  "git.path": "C:\\Users\\foo\\Documents\\wslgit.exe"
+}
+```
+
+Using PHP on WSL:
+
+```json
+{
+  "php.validate.executablePath": "C:\\Users\\foo\\Documents\\wslphp.exe"
+}
+```
+
+
+## How it works
 
 ### Path translation
 
-A Windows path (e.g. `C:\`) in command arguments are translated to a WSL path (e.g. `/mnt/c`).
+Windows paths (e.g. `C:\`) in command line are translated to WSL paths (e.g. `/mnt/c`).
 
 For example,
 
