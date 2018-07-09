@@ -2,40 +2,43 @@
 
 A wrapper to run a Linux command inside WSL (Windows Subsystem for Linux) from Windows native applications.
 
+If you are looking for Git on WSL solution, [andy-5/wslgit](https://github.com/andy-5/wslgit) is the best.
+
 
 ## Getting Started
 
-Download [the latest release](https://github.com/int128/wslexec/releases).
+### Visual Studio and PHP
 
-Rename the binary to command name with prefix `wsl`.
-For example, rename the binary to `wslgit` to run the `git` command inside WSL.
+You can use PHP on WSL from Windows native Visual Studio.
 
-### IntelliJ IDEA and GoLand
+Download [the latest release](https://github.com/int128/wslexec/releases) and save as `wslphp.exe`.
 
-Open Default Settings - Version Control - Git and set the Path to Git executable.
-
-![GoLand Settings](images/goland.png)
-
-### Visual Studio Code
-
-Using Git on WSL:
+Configure path as follows:
 
 ```json
 {
-  "git.path": "C:\\Users\\foo\\Documents\\wslgit.exe"
+  "php.validate.executablePath": "C:\\Users\\USER\\Documents\\wslphp.exe"
 }
 ```
 
-Using PHP on WSL:
+If you are using the [PHP IntelliSense](https://marketplace.visualstudio.com/items?itemName=felixfbecker.php-intellisense) extension, configure paths as follows:
 
 ```json
 {
-  "php.validate.executablePath": "C:\\Users\\foo\\Documents\\wslphp.exe"
+  "php.executablePath": "C:\\Users\\USER\\Documents\\wslphp.exe",
+  "php.validate.executablePath": "C:\\Users\\USER\\Documents\\wslphp.exe"
 }
 ```
+
+### Visual Studio and Node.js
+
+WIP
 
 
 ## How it works
+
+Rename the binary to command name with prefix `wsl`.
+For example, rename the binary to `wslgit` to run the `git` command inside WSL.
 
 ### Windows path translation
 
