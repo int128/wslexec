@@ -21,15 +21,6 @@ Configure path as follows:
 }
 ```
 
-If you are using the [PHP IntelliSense](https://marketplace.visualstudio.com/items?itemName=felixfbecker.php-intellisense) extension, configure paths as follows:
-
-```json
-{
-  "php.executablePath": "C:\\Users\\USER\\Documents\\wslphp.exe",
-  "php.validate.executablePath": "C:\\Users\\USER\\Documents\\wslphp.exe"
-}
-```
-
 ### Visual Studio and Node.js
 
 WIP
