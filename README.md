@@ -7,13 +7,13 @@ If you are looking for Git on WSL solution, [andy-5/wslgit](https://github.com/a
 
 ## Getting Started
 
-### Visual Studio and PHP
+### Visual Studio Code and PHP
 
-You can use PHP on WSL from Windows native Visual Studio.
+You can use PHP on WSL from Windows native Visual Studio Code.
 
 Download [the latest release](https://github.com/int128/wslexec/releases) and save as `wslphp.exe`.
 
-Configure path as follows:
+Open Visual Studio Code and configure path as follows:
 
 ```json
 {
