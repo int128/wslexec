@@ -1,20 +1,20 @@
 package main
 
 import (
-	"os/exec"
+	"bufio"
+	"fmt"
 	"log"
 	"os"
-	"strings"
+	"os/exec"
 	"path/filepath"
-	"syscall"
 	"regexp"
-	"fmt"
-	"bufio"
+	"strings"
+	"syscall"
 )
 
 func main() {
 	baseName := filepath.Base(os.Args[0])
-	if ! strings.HasPrefix(baseName, "wsl") {
+	if !strings.HasPrefix(baseName, "wsl") {
 		log.Println("Basename does not have prefix: ", baseName)
 		log.Fatal("Rename this binary to command name with prefix `wsl`. For example, rename to `wslgit` to run git command on WSL.")
 	}
@@ -69,7 +69,7 @@ var windowsDrivePathPattern = regexp.MustCompile("([[:alpha:]]):\\\\")
 
 func translateWindowsPathInArg(arg string) string {
 	if windowsDrivePathPattern.FindStringIndex(arg) != nil {
-		driveReplaced := windowsDrivePathPattern.ReplaceAllStringFunc(arg, func (drivePath string) string {
+		driveReplaced := windowsDrivePathPattern.ReplaceAllStringFunc(arg, func(drivePath string) string {
 			m := windowsDrivePathPattern.FindStringSubmatch(drivePath)
 			drive := strings.ToLower(m[1])
 			return fmt.Sprintf("/mnt/%s/", drive)
