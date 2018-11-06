@@ -15,8 +15,7 @@ import (
 func main() {
 	baseName := filepath.Base(os.Args[0])
 	if !strings.HasPrefix(baseName, "wsl") {
-		log.Println("Basename does not have prefix: ", baseName)
-		log.Fatal("Rename this binary to command name with prefix `wsl`. For example, rename to `wslgit` to run git command on WSL.")
+		log.Fatalf("Basename `%s` does not have the prefix. Rename this binary to command name with prefix `wsl`. For example, rename to `wslgit` to run git command on WSL.", baseName)
 	}
 
 	commandName := strings.TrimSuffix(strings.TrimPrefix(baseName, "wsl"), ".exe")
@@ -25,21 +24,17 @@ func main() {
 
 	cmd := exec.Command("wsl", commandLine...)
 	cmd.Stderr = os.Stderr
-
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
-		log.Panic(err)
+		log.Fatalf("Could not create a pipe to standard output: %s", err)
 	}
-
 	if err := cmd.Start(); err != nil {
-		log.Panic(err)
+		log.Fatalf("Could not start command: %s", err)
 	}
-
 	scanner := bufio.NewScanner(stdout)
 	for scanner.Scan() {
 		fmt.Println(translateWslPath(scanner.Text()))
 	}
-
 	if err := cmd.Wait(); err != nil {
 		status := 1
 		if exitError, ok := err.(*exec.ExitError); ok {
