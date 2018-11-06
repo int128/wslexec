@@ -1,0 +1,40 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.11.1
+    steps:
+      - checkout
+      - run: go get -u golang.org/x/lint/golint
+      - run: golint
+      - run: go vet
+      - run: go build -v
+      - run: go test -v ./...
+
+  release:
+    docker:
+      - image: circleci/golang:1.11.1
+    steps:
+      - checkout
+      - run: go vet
+      - run: go get github.com/mitchellh/gox
+      - run: go get github.com/tcnksm/ghr
+      - run: gox -osarch windows/amd64 -output 'dist/{{.Dir}}'
+      - run: ghr -u "$CIRCLE_PROJECT_USERNAME" -r "$CIRCLE_PROJECT_REPONAME" "$CIRCLE_TAG" dist
+
+workflows:
+  version: 2
+  all:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
+      - release:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /.*/
+          requires:
+            - build
