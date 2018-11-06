@@ -33,7 +33,7 @@ For example, rename the binary to `wslgit` to run the `git` command inside WSL.
 
 ### Windows path translation
 
-Windows paths (e.g. `C:\`) in the command line are translated to WSL paths (e.g. `/mnt/c`).
+Windows paths (e.g. `C:\`) in command line are translated to WSL paths (e.g. `/mnt/c`).
 
 For example,
 
@@ -41,7 +41,7 @@ For example,
 wslgit.exe -C C:\Users\foo\example log
 ```
 
-is translated to following:
+is translated to the following command:
 
 ```sh
 git -C /mnt/c/Users/foo/example log
@@ -49,7 +49,7 @@ git -C /mnt/c/Users/foo/example log
 
 ### WSL path translation
 
-WSL paths (e.g. `/mnt/c`) in the standard input are translated to Windows paths (e.g. `C:/`).
+WSL paths (e.g. `/mnt/c`) in standard input are translated to Windows paths (e.g. `C:/`).
 
 For example,
 
@@ -57,7 +57,7 @@ For example,
 /mnt/c/Users/foo/example
 ```
 
-is translated to following:
+is translated to the following command:
 
 ```sh
 c:/Users/foo/example
@@ -66,12 +66,4 @@ c:/Users/foo/example
 
 ## Contributions
 
-Feel free to open an issue or pull request.
-
-### Release from CircleCI
-
-Push a tag, then CircleCI will release a build to GitHub.
-
-It requires following environment variable:
-
-- `GITHUB_TOKEN`
+Feel free to open issues and pull requests.
