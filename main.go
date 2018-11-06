@@ -63,15 +63,14 @@ func translateWindowsPathInArgs(windowsPathArgs []string) []string {
 var windowsDrivePathPattern = regexp.MustCompile("([[:alpha:]]):\\\\")
 
 func translateWindowsPathInArg(arg string) string {
-	if windowsDrivePathPattern.FindStringIndex(arg) != nil {
-		driveReplaced := windowsDrivePathPattern.ReplaceAllStringFunc(arg, func(drivePath string) string {
-			m := windowsDrivePathPattern.FindStringSubmatch(drivePath)
-			drive := strings.ToLower(m[1])
-			return fmt.Sprintf("/mnt/%s/", drive)
-		})
-		backslashReplaced := strings.Replace(driveReplaced, "\\", "/", -1)
-		return backslashReplaced
-	} else {
+	if windowsDrivePathPattern.FindStringIndex(arg) == nil {
 		return arg
 	}
+	driveReplaced := windowsDrivePathPattern.ReplaceAllStringFunc(arg, func(drivePath string) string {
+		m := windowsDrivePathPattern.FindStringSubmatch(drivePath)
+		drive := strings.ToLower(m[1])
+		return fmt.Sprintf("/mnt/%s/", drive)
+	})
+	backslashReplaced := strings.Replace(driveReplaced, "\\", "/", -1)
+	return backslashReplaced
 }
