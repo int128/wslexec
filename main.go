@@ -61,8 +61,21 @@ func translateWindowsPathInArgs(windowsPathArgs []string) []string {
 }
 
 var windowsDrivePathPattern = regexp.MustCompile("([[:alpha:]]):\\\\")
+var windowsDrivePathPatternPHPStorm = regexp.MustCompile("([[:alpha:]]):/")
 
 func translateWindowsPathInArg(arg string) string {
+
+	// Fix for PHPStorm Paths in Cross-Environemnt
+	if windowsDrivePathPatternPHPStorm.FindStringIndex(arg) != nil {
+		driveReplaced := windowsDrivePathPatternPHPStorm.ReplaceAllStringFunc(arg, func(drivePath string) string {
+			m := windowsDrivePathPatternPHPStorm.FindStringSubmatch(drivePath)
+			drive := strings.ToLower(m[1])
+			return fmt.Sprintf("/mnt/%s/", drive)
+		})
+		backslashReplaced := strings.Replace(driveReplaced, "\\", "/", -1)
+		return backslashReplaced
+	}
+
 	if windowsDrivePathPattern.FindStringIndex(arg) == nil {
 		return arg
 	}
